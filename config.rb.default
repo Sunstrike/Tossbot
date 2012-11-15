@@ -1,0 +1,32 @@
+## Config for Azbot Mini (Redubot)
+
+# Streamer channel - Lower case
+STREAMER_NAME = ""
+
+# The bot login details to Twitch
+$JTVIRC_ACCOUNT = ""
+JTVIRC_PASSWORD = ""
+
+## !ip responder
+$IP_RESPONDER = true
+$IP_RESPONDER_MESSAGE = "This bot has not been configured fully. Please inform the streamer."
+
+## !mods responder
+$MODS_RESPONDER = true
+$MODS_RESPONDER_MESSAGE = "This bot has not been configured fully. Please inform the streamer."
+
+## Stream IP responder
+$STREAMIP_RESPONDER = false
+# Valid actions on detecting the IP:
+#   :warn - send message
+#   No other modes implemented (yet)
+$STREAMIP_ACTION = :warn
+$STREAMIP_WARN_MESSAGE = "Do not post the stream IP in chat."
+# The regex used to detect the stream IP address
+$STREAMIP_REGEX = /127.0.0.1/n
+
+# FOR DEVELOPERS: Stop the system connecting to IRC
+DEBUG_MODE = false
+
+# 'Utilities' enabled?
+UTILITIES_ENABLED = true
