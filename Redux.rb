@@ -1,7 +1,5 @@
-#!/usr/bin/env ruby -wKU
-
 ## Azbot-Mini
-##      => Core
+##      => !redux responder
 #
 # Twitch self-hosted moderation for the masses
 # 
@@ -27,55 +25,15 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-require 'cinch'
-require_relative 'About.rb'
-require_relative 'config.rb'
+puts "Loaded module: !redux responder"
 
-require_relative 'CinchMonkeypatch.rb' # Fix for Twitch+Cinch weirdness due to WHOIS
+class Redux
+    include Cinch::Plugin
 
-JTVIRC_SERVER = "#{STREAMER_NAME}.jtvirc.com"
+    match /redux/n
 
-if UTILITIES_ENABLED
-    require_relative 'Utilities.rb'
-    plugins = [About, Hugsim, Ecu, Bord, NES]
-else
-    plugins = [About]
-end
-
-if $IP_RESPONDER
-    require_relative 'IP.rb'
-    plugins << IP
-end
-if $MODS_RESPONDER
-    require_relative 'Mods.rb'
-    plugins << Mods
-end
-if $STREAMIP_RESPONDER
-    require_relative 'StreamIP.rb'
-    plugins << StreamIP
-end
-if $REDUX_RESPONDER
-    require_relative 'Redux.rb'
-    plugins << Redux
-end
-
-puts "STARTING CINCH CORE:"
-puts "\tServer: #{JTVIRC_SERVER}"
-puts "\tChannel: ##{STREAMER_NAME}"
-puts "\tBot Account: #{$JTVIRC_ACCOUNT}"
-
-bot = Cinch::Bot.new do
-    configure do |c|
-        c.server = JTVIRC_SERVER
-        c.nick = $JTVIRC_ACCOUNT
-        c.user = $JTVIRC_ACCOUNT
-        c.password = JTVIRC_PASSWORD
-        c.channels = ["##{STREAMER_NAME}"]
-        c.plugins.plugins = plugins
-        c.messages_per_second = 1
+    def execute(msg)
+        debug "Sending Redux message to #{msg.user.nick}"
+        msg.reply "#{msg.user.nick}: #{$REDUX_RESPONDER_MESSAGE}"
     end
-end
-
-if !DEBUG_MODE
-    bot.start
 end

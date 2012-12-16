@@ -15,6 +15,10 @@ $IP_RESPONDER_MESSAGE = "This bot has not been configured fully. Please inform t
 $MODS_RESPONDER = true
 $MODS_RESPONDER_MESSAGE = "This bot has not been configured fully. Please inform the streamer."
 
+## !redux responder
+$REDUX_RESPONDER = false
+$REDUX_RESPONDER_MESSAGE = "This bot has not been configured fully. Please inform the streamer."
+
 ## Stream IP responder
 $STREAMIP_RESPONDER = false
 # Valid actions on detecting the IP:
