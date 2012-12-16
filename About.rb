@@ -34,7 +34,9 @@ class About
     match /#{$JTVIRC_ACCOUNT}/i
 
     def execute(msg)
-        debug "Sending about message"
-        msg.reply "#{$JTVIRC_ACCOUNT} is a deployment of Azbot Mini by Sunstrike. Source available from BitBucket."
+    	if (msg.user.nick.downcase != $JTVIRC_ACCOUNT.downcase)
+        	debug "Sending about message"
+        	msg.reply "#{$JTVIRC_ACCOUNT} is a deployment of Azbot Mini by Sunstrike. Source available from BitBucket."
+        end
     end
 end
