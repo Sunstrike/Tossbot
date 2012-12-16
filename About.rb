@@ -30,8 +30,8 @@ puts "Loaded module: !about and !#{$JTVIRC_ACCOUNT} responder"
 class About
     include Cinch::Plugin
 
-    match /about/n
-    match /#{$JTVIRC_ACCOUNT}/n
+    match /about/i
+    match /#{$JTVIRC_ACCOUNT}/i
 
     def execute(msg)
         debug "Sending about message"
