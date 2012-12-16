@@ -31,7 +31,7 @@ class About
     include Cinch::Plugin
 
     match /about/i
-    match /#{$JTVIRC_ACCOUNT}/i
+    #match /#{$JTVIRC_ACCOUNT}/i
 
     def execute(msg)
     	if (msg.user.nick.downcase != $JTVIRC_ACCOUNT.downcase)
