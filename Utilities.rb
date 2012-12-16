@@ -39,6 +39,18 @@ class Bord
     end
 end
 
+class Sunstrike
+    include Cinch::Plugin
+
+    match /sunstrike/i
+    match /aeranan/i
+
+    def execute(msg)
+        debug "Sending Sunstrike message"
+        msg.reply "The Reduxcraft tech~elf. Also a beginner Forge modder (RecipeChanger/AZTeams)."
+    end
+end
+
 class NES
     include Cinch::Plugin
 

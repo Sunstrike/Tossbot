@@ -37,7 +37,7 @@ JTVIRC_SERVER = "#{STREAMER_NAME}.jtvirc.com"
 
 if UTILITIES_ENABLED
     require_relative 'Utilities.rb'
-    plugins = [About, Hugsim, Ecu, Bord, NES]
+    plugins = [About, Hugsim, Ecu, Bord, Sunstrike, NES]
 else
     plugins = [About]
 end
