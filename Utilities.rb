@@ -51,6 +51,18 @@ class Sunstrike
     end
 end
 
+class Cubby
+    include Cinch::Plugin
+
+    match /stranger/i
+    match /cubby/i
+
+    def execute(msg)
+        debug "Sending Cubby message"
+        msg.reply "Don't take the candy!"
+    end
+end
+
 class NES
     include Cinch::Plugin
 
