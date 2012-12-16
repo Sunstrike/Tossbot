@@ -25,12 +25,13 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-puts "Loaded module: !about responder"
+puts "Loaded module: !about and !#{$JTVIRC_ACCOUNT} responder"
 
 class About
     include Cinch::Plugin
 
     match /about/n
+    match /#{$JTVIRC_ACCOUNT}/n
 
     def execute(msg)
         debug "Sending about message"
