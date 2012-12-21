@@ -70,6 +70,7 @@ bot = Cinch::Bot.new do
         c.nick = $JTVIRC_ACCOUNT
         c.user = $JTVIRC_ACCOUNT
         c.password = JTVIRC_PASSWORD
+        c.timeouts.connect = 30
         c.channels = ["##{STREAMER_NAME}"]
         c.plugins.plugins = plugins
         c.messages_per_second = 1
