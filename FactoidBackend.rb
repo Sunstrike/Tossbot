@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby -wKU
 
 ## Azbot-Mini
-##      => Factoid core
+##      => Factoid backend connector
 #
 # Twitch self-hosted moderation for the masses
 # 
@@ -27,21 +27,16 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-require_relative 'FactoidBackend.rb'
+require 'sequel'
 
-class FactoidCore
-    include Cinch::Plugin
+class FactoidBackend
+    @dbLink = nil
 
-    match /fa?c?t?o?i?d? (.+)/i, { :method => :control }
-    match /.+/i, { :prefix => "!", :method => :factoid }
-
-    backend = FactoidBackend.new()
-
-    def factoid(msg)
-        debug "FMSG (Command: #{msg.command}, Params: #{msg.params.inspect}, Message: #{msg.message}, Raw: #{msg.raw})"
+    def initialize(rootDir)
+        @dbLink = Sequel.connect("sqlite://#{rootDir}/factoids.db")
     end
 
-    def control(msg)
-    	debug "FCMSG (Command: #{msg.command}, Params: #{msg.params.inspect}, Message: #{msg.message}, Raw: #{msg.raw})"
-    end
+	def getFactoid(name)
+
+	end
 end
