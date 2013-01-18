@@ -1,5 +1,6 @@
 ## Config for Azbot Mini (Redubot)
 
+## USER BLOCK ##
 # Streamer channel - Lower case
 STREAMER_NAME = ""
 
@@ -20,5 +21,8 @@ $STREAMIP_WARN_MESSAGE = "Do not post the stream IP in chat."
 # The regex used to detect the stream IP address
 $STREAMIP_REGEX = /127.0.0.1/n
 
-# FOR DEVELOPERS: Stop the system connecting to IRC
+## DEVELOPER BLOCK ##
+# Stop the system connecting to IRC
 DEBUG_MODE = false
+# Change target server
+$JTVIRC_SERVER = "#{STREAMER_NAME}.jtvirc.com"
