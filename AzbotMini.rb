@@ -28,51 +28,36 @@
 #
 
 require 'cinch'
-require_relative 'About.rb'
 require_relative 'config.rb'
 
 require_relative 'CinchMonkeypatch.rb' # Fix for Twitch+Cinch weirdness due to WHOIS
 
-JTVIRC_SERVER = "#{STREAMER_NAME}.jtvirc.com"
+ABS_PATH = File.expand_path(File.dirname(__FILE__))
 
-if UTILITIES_ENABLED
-    require_relative 'Utilities.rb'
-    plugins = [About, Hugsim, Ecu, Bord, Sunstrike, Cubby, NES]
-else
-    plugins = [About]
-end
+plugins = []
 
-if $IP_RESPONDER
-    require_relative 'IP.rb'
-    plugins << IP
-end
-if $MODS_RESPONDER
-    require_relative 'Mods.rb'
-    plugins << Mods
-end
-if $STREAMIP_RESPONDER
-    require_relative 'StreamIP.rb'
-    plugins << StreamIP
-end
-if $REDUX_RESPONDER
-    require_relative 'Redux.rb'
-    plugins << Redux
+if $FACTOIDS
+    require_relative 'FactoidCore.rb'
+    plugins << FactoidCore
 end
 
 puts "STARTING CINCH CORE:"
-puts "\tServer: #{JTVIRC_SERVER}"
+puts "\tServer: #{$JTVIRC_SERVER}"
 puts "\tChannel: ##{STREAMER_NAME}"
 puts "\tBot Account: #{$JTVIRC_ACCOUNT}"
+puts "\tPatches: TwitchIRC Patch (by Sunstrike)"
 
 bot = Cinch::Bot.new do
     configure do |c|
-        c.server = JTVIRC_SERVER
+        c.server = $JTVIRC_SERVER
         c.nick = $JTVIRC_ACCOUNT
         c.user = $JTVIRC_ACCOUNT
         c.password = JTVIRC_PASSWORD
         c.timeouts.connect = 30
         c.channels = ["##{STREAMER_NAME}"]
+        c.plugins[:prefix] = /^~/
         c.plugins.plugins = plugins
+        c.plugins.options[FactoidCore] = { :path => ABS_PATH }
         c.messages_per_second = 1
     end
 end

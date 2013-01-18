@@ -1,5 +1,7 @@
+#!/usr/bin/env ruby -wKU
+
 ## Azbot-Mini
-##      => !redux responder
+##      => Factoid core
 #
 # Twitch self-hosted moderation for the masses
 # 
@@ -25,15 +27,17 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-puts "Loaded module: !redux responder"
-
-class Redux
+class FactoidCore
     include Cinch::Plugin
 
-    match /redux/n
+    match /fa?c?t?o?i?d? (.+)/i, { :method => :control }
+    match /.+/i, { :prefix => "!", :method => :factoid }
 
-    def execute(msg)
-        debug "Sending Redux message to #{msg.user.nick}"
-        msg.reply "#{msg.user.nick}: #{$REDUX_RESPONDER_MESSAGE}"
+    def factoid(msg)
+        debug "FMSG (Command: #{msg.command}, Params: #{msg.params.inspect}, Message: #{msg.message}, Raw: #{msg.raw})"
+    end
+
+    def control(msg)
+    	debug "FCMSG (Command: #{msg.command}, Params: #{msg.params.inspect}, Message: #{msg.message}, Raw: #{msg.raw})"
     end
 end

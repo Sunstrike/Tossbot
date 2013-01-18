@@ -7,17 +7,8 @@ STREAMER_NAME = ""
 $JTVIRC_ACCOUNT = ""
 JTVIRC_PASSWORD = ""
 
-## !ip responder
-$IP_RESPONDER = true
-$IP_RESPONDER_MESSAGE = "This bot has not been configured fully. Please inform the streamer."
-
-## !mods responder
-$MODS_RESPONDER = true
-$MODS_RESPONDER_MESSAGE = "This bot has not been configured fully. Please inform the streamer."
-
-## !redux responder
-$REDUX_RESPONDER = false
-$REDUX_RESPONDER_MESSAGE = "This bot has not been configured fully. Please inform the streamer."
+# Factoid module (the bot is pretty useless without this)
+$FACTOIDS = true
 
 ## Stream IP responder
 $STREAMIP_RESPONDER = false
@@ -31,6 +22,3 @@ $STREAMIP_REGEX = /127.0.0.1/n
 
 # FOR DEVELOPERS: Stop the system connecting to IRC
 DEBUG_MODE = false
-
-# 'Utilities' enabled?
-UTILITIES_ENABLED = true
