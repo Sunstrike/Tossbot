@@ -50,4 +50,8 @@ class FactoidBackend
 	def getFactoid(name)
 
 	end
+
+    def setOrUpdateFactoid(name, text)
+
+    end
 end
