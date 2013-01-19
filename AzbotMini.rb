@@ -32,7 +32,7 @@ require_relative 'config.rb'
 
 require_relative 'CinchMonkeypatch.rb' # Fix for Twitch+Cinch weirdness due to WHOIS
 
-ABS_PATH = File.expand_path(File.dirname(__FILE__))
+PATH = File.dirname(__FILE__)
 
 plugins = []
 
@@ -57,7 +57,7 @@ bot = Cinch::Bot.new do
         c.channels = ["##{STREAMER_NAME}"]
         c.plugins[:prefix] = /^~/
         c.plugins.plugins = plugins
-        c.plugins.options[FactoidCore] = { :path => ABS_PATH }
+        c.plugins.options[FactoidCore] = { :path => PATH }
         c.messages_per_second = 1
     end
 end

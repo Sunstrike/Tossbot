@@ -34,7 +34,17 @@ class FactoidBackend
         @logger = bot.loggers
         path = "sqlite://#{rootDir}/factoids.db"
         @logger.info("[FactoidBackend] Attaching to #{path}")
-        @dbLink = Sequel.sqlite(path)
+        @dbLink = Sequel.connect(path)
+        # Create table if needed
+        @dbLink.create_table? :factoids do
+            primary_key :id
+            String :name
+            String :text
+        end
+        @factDb = @dbLink[:factoids]
+        if @factDb.count <= 0
+            @logger.info("[FactoidBackend] No entries in Factoid table! Use ~f set to add factoids or alter the SQLite3 DB manually.")
+        end
     end
 
 	def getFactoid(name)
