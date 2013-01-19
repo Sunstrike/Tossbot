@@ -32,6 +32,7 @@ require 'sequel'
 class FactoidBackend
     def initialize(rootDir, bot)
         @logger = bot.loggers
+        @cache = {}
         path = "sqlite://#{rootDir}/factoids.db"
         @logger.info("[FactoidBackend] Attaching to #{path}")
         @dbLink = Sequel.connect(path)
@@ -42,16 +43,52 @@ class FactoidBackend
             String :text
         end
         @factDb = @dbLink[:factoids]
-        if @factDb.count <= 0
+        if @factDb.empty?
             @logger.info("[FactoidBackend] No entries in Factoid table! Use ~f set to add factoids or alter the SQLite3 DB manually.")
+        else
+            rebuildCache()
         end
     end
 
-	def getFactoid(name)
+    def rebuildCache()
+        @logger.info("[FactoidBackend] Rebuilding memory-resident cache.")
+        @cache = @factDb.to_hash(:name, :text)
+    end
 
+	def getFactoid(name)
+        name.downcase!
+        if @cache.has_key?(name)
+            return @cache[name]
+        else
+            tmp = @factDb.filter(:name => name).first
+            if tmp == nil || tmp == ""
+                return nil
+            else
+                # Self-repair in case of things in the DB but not in the cache
+                rebuildCache()
+                return tmp
+            end
+        end
 	end
 
     def setOrUpdateFactoid(name, text)
+        name.downcase!
+        tmp = @factDb.filter(:name => name).first
+        result = :unknown
+        if tmp == nil
+            @factDb.insert(:name => name, :text => text)
+            result = :add
+        else
+            @factDb.filter(:name => name).update(:text => text)
+            result = :update
+        end
+        @cache[name] = text
+        return result
+    end
 
+    def deleteFactoid(name)
+        name.downcase!
+        @factDb.filter(:name => name).delete
+        @cache.delete(name)
     end
 end

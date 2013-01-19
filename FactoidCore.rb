@@ -42,9 +42,54 @@ class FactoidCore
 
     def factoid(msg)
         debug "FMSG (Command: #{msg.command}, Params: #{msg.params.inspect}, Message: #{msg.message}, Raw: #{msg.raw})"
+        f = msg.message.strip.gsub("!", "")
+        ft = @backend.getFactoid(f)
+        if ft == nil
+            return
+        end
+        msg.reply("#{msg.user.nick}: #{ft}")
     end
 
     def control(msg)
     	debug "FCMSG (Command: #{msg.command}, Params: #{msg.params.inspect}, Message: #{msg.message}, Raw: #{msg.raw})"
+        matches = /^~fa?c?t?o?i?d? (\w+) (\w+) ?(.+)?$/i.match(msg.message)
+
+        if matches[1] == nil || matches[2] == nil
+            return
+        end
+
+        cmd = matches[1]
+        fname = matches[2]
+
+        if adminPermCheck(msg.user, msg.channel)
+            cmd.downcase!
+            if /^(se?t?|up?d?a?t?e?)$/i.match(cmd) != nil && matches[3] != nil
+                msg.reply(insertOrUpdate(fname, matches[3]))
+            elsif /^(de?l?e?t?e?)$/i.match(cmd) != nil
+                msg.reply(delete(fname))
+            else
+                return
+            end
+        end
+    end
+
+    def insertOrUpdate(fname, ftext)
+        res = @backend.setOrUpdateFactoid(fname, ftext)
+        if res == :add
+            return("Factoid stored.")
+        elsif res == :update
+            return("Factoid updated.")
+        else
+            return("Unknown internal state when adding/updating factoid.")
+        end
+    end
+
+    def delete(fname)
+        @backend.deleteFactoid(fname.downcase)
+        return("Factoid deleted.")
+    end
+
+    def adminPermCheck(user, chan)
+        return chan.opped?(user) || chan.half_opped?(user) || chan.voiced?(user)
     end
 end
