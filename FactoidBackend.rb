@@ -30,10 +30,11 @@
 require 'sequel'
 
 class FactoidBackend
-    @dbLink = nil
-
-    def initialize(rootDir)
-        @dbLink = Sequel.connect("sqlite://#{rootDir}/factoids.db")
+    def initialize(rootDir, bot)
+        @logger = bot.loggers
+        path = "sqlite://#{rootDir}/factoids.db"
+        @logger.info("[FactoidBackend] Attaching to #{path}")
+        @dbLink = Sequel.sqlite(path)
     end
 
 	def getFactoid(name)

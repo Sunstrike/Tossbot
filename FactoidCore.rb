@@ -35,7 +35,10 @@ class FactoidCore
     match /fa?c?t?o?i?d? (.+)/i, { :method => :control }
     match /.+/i, { :prefix => "!", :method => :factoid }
 
-    backend = FactoidBackend.new()
+    def initialize(bot)
+        super(bot)
+        @backend = FactoidBackend.new(config[:path], bot)
+    end
 
     def factoid(msg)
         debug "FMSG (Command: #{msg.command}, Params: #{msg.params.inspect}, Message: #{msg.message}, Raw: #{msg.raw})"
