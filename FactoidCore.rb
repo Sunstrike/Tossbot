@@ -32,8 +32,8 @@ require_relative 'FactoidBackend.rb'
 class FactoidCore
     include Cinch::Plugin
 
-    match /fa?c?t?o?i?d? (.+)/i, { :method => :control }
-    match /.+/i, { :prefix => "!", :method => :factoid }
+    match(/fa?c?t?o?i?d? (.+)/i, { :method => :control })
+    match(/.+/i, { :prefix => "!", :method => :factoid })
 
     def initialize(bot)
         super(bot)
