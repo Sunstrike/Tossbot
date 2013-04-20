@@ -5,7 +5,7 @@
 #
 # Twitch self-hosted moderation for the masses
 # 
-# Copyright (C) 2012 Robert Tully
+# Copyright (C) 2012 Sunstrike
 # 
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation
@@ -33,9 +33,9 @@ class FactoidBackend
     def initialize(rootDir, bot)
         @logger = bot.loggers
         @cache = {}
-        path = "sqlite://#{rootDir}/factoids.db"
+        path = 'factoids.db'
         @logger.info("[FactoidBackend] Attaching to #{path}")
-        @dbLink = Sequel.connect(path)
+        @dbLink = Sequel.connect(:adapter => 'sqlite', :database => path)
         # Create table if needed
         @dbLink.create_table? :factoids do
             primary_key :id
@@ -44,14 +44,14 @@ class FactoidBackend
         end
         @factDb = @dbLink[:factoids]
         if @factDb.empty?
-            @logger.info("[FactoidBackend] No entries in Factoid table! Use ~f set to add factoids or alter the SQLite3 DB manually.")
+            @logger.info('[FactoidBackend] No entries in Factoid table! Use ~f set to add factoids or alter the SQLite3 DB manually.')
         else
             rebuildCache()
         end
     end
 
     def rebuildCache()
-        @logger.info("[FactoidBackend] Rebuilding memory-resident cache.")
+        @logger.info('[FactoidBackend] Rebuilding memory-resident cache.')
         @cache = @factDb.to_hash(:name, :text)
     end
 
@@ -61,7 +61,7 @@ class FactoidBackend
             return @cache[name]
         else
             tmp = @factDb.filter(:name => name).first
-            if tmp == nil || tmp == ""
+            if tmp == nil || tmp == ''
                 return nil
             else
                 # Self-repair in case of things in the DB but not in the cache

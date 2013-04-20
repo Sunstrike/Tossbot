@@ -5,7 +5,7 @@
 #
 # Twitch self-hosted moderation for the masses
 # 
-# Copyright (C) 2012 Robert Tully
+# Copyright (C) 2012 Sunstrike
 # 
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation
@@ -30,18 +30,18 @@
 require 'cinch'
 require_relative 'config.rb'
 
-require_relative 'CinchMonkeypatch.rb' # Fix for Twitch+Cinch weirdness due to WHOIS
+require_relative 'modules/CinchMonkeypatch.rb' # Fix for Twitch+Cinch weirdness due to WHOIS
 
 PATH = File.dirname(__FILE__)
 
 plugins = []
 
 if $FACTOIDS
-    require_relative 'FactoidCore.rb'
+    require_relative 'modules/FactoidCore.rb'
     plugins << FactoidCore
 end
 
-puts "STARTING CINCH CORE:"
+puts 'STARTING CINCH CORE:'
 puts "\tServer: #{$JTVIRC_SERVER}"
 puts "\tChannel: ##{STREAMER_NAME}"
 puts "\tBot Account: #{$JTVIRC_ACCOUNT}"

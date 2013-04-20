@@ -5,7 +5,7 @@
 #
 # Twitch self-hosted moderation for the masses
 # 
-# Copyright (C) 2012 Robert Tully
+# Copyright (C) 2012 Sunstrike
 # 
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation
@@ -32,8 +32,8 @@ require_relative 'FactoidBackend.rb'
 class FactoidCore
     include Cinch::Plugin
 
-    match(/fa?c?t?o?i?d? (.+)/i, { :method => :control })
-    match(/.+/i, { :prefix => "!", :method => :factoid })
+    match /fa?c?t?o?i?d? (.+)/i, { :method => :control }
+    match /.+/i, { :prefix => '!', :method => :factoid }
 
     def initialize(bot)
         super(bot)
@@ -41,13 +41,19 @@ class FactoidCore
     end
 
     def factoid(msg)
-        debug "FMSG (Command: #{msg.command}, Params: #{msg.params.inspect}, Message: #{msg.message}, Raw: #{msg.raw})"
-        f = msg.message.strip.gsub("!", "")
+        matches = /^!(\w+) ?(:\w+)?$/i.match(msg.message)
+        debug "FMSG (matches[1]: #{matches[1]}, matches[2]: #{matches[2]}, Message: #{msg.message}, Raw: #{msg.raw})"
+        f = matches[1].strip.gsub('!', '')
         ft = @backend.getFactoid(f)
         if ft == nil
             return
         end
-        msg.reply("#{msg.user.nick}: #{ft}")
+
+        if matches[2] == nil || matches[2] == ''
+            msg.reply("#{msg.user.nick}: #{ft}")
+        else
+            msg.reply("#{matches[2].strip.gsub(':', '')}: #{ft}")
+        end
     end
 
     def control(msg)
@@ -76,20 +82,20 @@ class FactoidCore
     def insertOrUpdate(fname, ftext)
         res = @backend.setOrUpdateFactoid(fname, ftext)
         if res == :add
-            return("Factoid stored.")
+            'Factoid stored.'
         elsif res == :update
-            return("Factoid updated.")
+            'Factoid updated.'
         else
-            return("Unknown internal state when adding/updating factoid.")
+            'Unknown internal state when adding/updating factoid.'
         end
     end
 
     def delete(fname)
         @backend.deleteFactoid(fname.downcase)
-        return("Factoid deleted.")
+        'Factoid deleted.'
     end
 
     def adminPermCheck(user, chan)
-        return chan.opped?(user) || chan.half_opped?(user) || chan.voiced?(user)
+        chan.opped?(user) || chan.half_opped?(user) || chan.voiced?(user)
     end
 end

@@ -11,16 +11,6 @@ JTVIRC_PASSWORD = ""
 # Factoid module (the bot is pretty useless without this)
 $FACTOIDS = true
 
-## Stream IP responder
-$STREAMIP_RESPONDER = false
-# Valid actions on detecting the IP:
-#   :warn - send message
-#   No other modes implemented (yet)
-$STREAMIP_ACTION = :warn
-$STREAMIP_WARN_MESSAGE = "Do not post the stream IP in chat."
-# The regex used to detect the stream IP address
-$STREAMIP_REGEX = /127.0.0.1/n
-
 ## DEVELOPER BLOCK ##
 # Stop the system connecting to IRC
 DEBUG_MODE = false
