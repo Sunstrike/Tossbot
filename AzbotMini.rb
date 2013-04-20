@@ -40,6 +40,10 @@ if $FACTOIDS
     require_relative 'modules/FactoidCore.rb'
     plugins << FactoidCore
 end
+if $LINK_DETECTIVE
+    require_relative 'modules/LinkDetective.rb'
+    plugins << LinkDetective
+end
 
 puts 'STARTING CINCH CORE:'
 puts "\tServer: #{$JTVIRC_SERVER}"
@@ -55,10 +59,16 @@ bot = Cinch::Bot.new do
         c.password = JTVIRC_PASSWORD
         c.timeouts.connect = 30
         c.channels = ["##{STREAMER_NAME}"]
+        c.messages_per_second = 1
         c.plugins[:prefix] = /^~/
         c.plugins.plugins = plugins
-        c.plugins.options[FactoidCore] = { :path => PATH }
-        c.messages_per_second = 1
+
+        if $FACTOIDS
+            c.plugins.options[FactoidCore] = { :path => PATH }
+        end
+        if $LINK_DETECTIVE
+            c.plugins.options[LinkDetective] = { :action => $LINK_DETECTIVE_ACTION }
+        end
     end
 end
 

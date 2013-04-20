@@ -11,6 +11,10 @@ JTVIRC_PASSWORD = ""
 # Factoid module (the bot is pretty useless without this)
 $FACTOIDS = true
 
+# Link detective
+$LINK_DETECTIVE = true
+$LINK_DETECTIVE_ACTION = :delete        # Options are: :delete, :timeout or :ban
+
 ## DEVELOPER BLOCK ##
 # Stop the system connecting to IRC
 DEBUG_MODE = false
