@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby -wKU
 
-## Azbot-Mini
+## Redubot
 ##      => Factoid core
 #
 # Twitch self-hosted moderation for the masses

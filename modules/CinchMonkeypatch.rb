@@ -1,4 +1,4 @@
-## Azbot-Mini
+## Redubot
 ##      => Cinch TwitchTV monkeypatch
 #
 # Twitch self-hosted moderation for the masses
