@@ -67,7 +67,10 @@ bot = Cinch::Bot.new do
             c.plugins.options[FactoidCore] = { :path => PATH }
         end
         if $LINK_DETECTIVE
-            c.plugins.options[LinkDetective] = { :action => $LINK_DETECTIVE_ACTION }
+            c.plugins.options[LinkDetective] = { :action         => $LINK_DETECTIVE_ACTION,
+                                                 :strikes        => $LINK_DETECTIVE_STRIKES,
+                                                 :strike_action  => $LINK_DETECTIVE_STRIKES_ACTION,
+                                                 :strike_verbose => $LINK_DETECTIVE_STRIKES_VERBOSE }
         end
     end
 end

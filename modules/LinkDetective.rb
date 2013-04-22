@@ -39,6 +39,7 @@ class LinkDetective
         # From http://daringfireball.net/2010/07/improved_regex_for_matching_urls
         @webRegex = Regexp.compile('(?i)\b((?:[a-z][\w-]+:(?:/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))', Regexp::EXTENDED | Regexp::IGNORECASE)
         @allowedUsers = {}
+        @strikes = {}
     end
 
     def check(msg)
@@ -55,35 +56,57 @@ class LinkDetective
             return
         end
 
-        matches = /^~?pe?r?m?i?t? (on?c?e?|al?w?a?y?s?) (\w+)$/.match(msg.message)
+        matches = /^~?pe?r?m?i?t? (on?c?e?|al?w?a?y?s?|st?r?i?k?e?s?) (\w+)$/.match(msg.message)
         if matches[1] == nil || matches[2] == nil
             return
         end
 
         debug "LD_PMSG: matches[1]: #{matches[1]}, matches[2]: #{matches[2]}, matches[1][0]: #{matches[1][0]}"
 
-        if matches[1][0] == 'o' || matches[1][0] == 'O'
+        if matches[1][0].downcase == 'o'
             # Once
             @allowedUsers[matches[2].downcase] = :once
-            msg.reply "Allowing #{matches[2].downcase} to link once."
-        else
+            msg.reply "Allowing #{matches[2]} to link once."
+        elsif matches[1][0].downcase == 'a'
             # Always
             @allowedUsers[matches[2].downcase] = :always
-            msg.reply "Allowing #{matches[2].downcase} to always link this run."
+            msg.reply "Allowing #{matches[2]} to always link this run."
+            @strikes[matches[2].downcase] = nil
+        else
+            # Strike reset
+            msg.reply "Clearing strikes for #{matches[2]}."
+            @strikes[matches[2].downcase] = nil
         end
     end
 
     def actOnUser(user, channel)
-        case config[:action]
-            when :delete
-                sleep(1)
-                channel.msg ".timeout #{user.name.downcase}"
-                sleep(5)
-                channel.msg ".unban #{user.name.downcase}"
-            when :timeout
-                channel.msg ".timeout #{user.name.downcase}"
-            when :ban
-                channel.msg ".ban #{user.name.downcase}"
+        if @strikes[user.name.downcase] == nil then @strikes[user.name.downcase] = 0 end
+        @strikes[user.name.downcase] += 1
+
+        if config[:strikes] && config[:strike_verbose]
+            channel.msg "Do not post links to chat, #{user.name} - Strike #{@strikes[user.name.downcase]}"
+        end
+
+        if @strikes[user.name.downcase] >= 3 && config[:strikes]
+            case config[:strike_action]
+                when :timeout
+                    channel.msg ".timeout #{user.name.downcase}"
+                when :ban
+                    channel.msg ".ban #{user.name.downcase}"
+            end
+            @strikes[user.name.downcase] = nil
+        else
+            case config[:action]
+                when :delete
+                    sleep(1)
+                    channel.msg ".timeout #{user.name.downcase}"
+                    sleep(5)
+                    channel.msg ".unban #{user.name.downcase}"
+                when :timeout
+                    channel.msg ".timeout #{user.name.downcase}"
+                when :ban
+                    channel.msg ".ban #{user.name.downcase}"
+            end
         end
     end
 

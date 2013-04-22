@@ -13,7 +13,10 @@ $FACTOIDS = true
 
 # Link detective
 $LINK_DETECTIVE = true
-$LINK_DETECTIVE_ACTION = :delete        # Options are: :delete, :timeout or :ban
+$LINK_DETECTIVE_ACTION = :delete            # Options are: :delete, :timeout or :ban
+$LINK_DETECTIVE_STRIKES = false             # Whether or not to use a strikes system
+$LINK_DETECTIVE_STRIKES_ACTION = :ban       # Options are: :ban or :timeout
+$LINK_DETECTIVE_STRIKES_VERBOSE = false     # Whether or not to tell the person the number of strikes they have
 
 ## DEVELOPER BLOCK ##
 # Stop the system connecting to IRC
