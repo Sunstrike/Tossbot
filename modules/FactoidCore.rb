@@ -74,7 +74,7 @@ class FactoidCore
 
         if adminPermCheck(msg.user, msg.channel)
             cmd.downcase!
-            if /^(se?t?|up?d?a?t?e?)$/i.match(cmd) != nil && matches[3] != nil
+            if /^(se?t?|up?d?a?t?e?|ad?d?)$/i.match(cmd) != nil && matches[3] != nil
                 msg.reply(insertOrUpdate(fname, matches[3]))
             elsif /^(de?l?e?t?e?)$/i.match(cmd) != nil
                 msg.reply(delete(fname))

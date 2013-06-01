@@ -4,7 +4,7 @@ All commands are in the form `~root subcommand parameters`
 ## Factoids module (FactoidsCore/FactoidsBackend)
 Root command is ~factoid (or ~f) -- This for mods/ops only
 
-- add/a/update/u - Adds or updates a factoid (e.g. `~f a Factoids There are factoids`)
+- add/a/set/s/update/u - Adds or updates a factoid (e.g. `~f a Factoids There are factoids`)
 - delete/d - Removes a factoid (e.g. `~f d Factoids`)
 - list/l - Lists all factoids on the current instance (`~f l`)
 
