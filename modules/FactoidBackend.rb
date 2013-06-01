@@ -69,7 +69,16 @@ class FactoidBackend
                 return tmp
             end
         end
-	end
+    end
+
+    def getFactoidList()
+        rebuildCache()
+        out = ''
+        @cache.each_key do |k|
+            out += "#{k} "
+        end
+        out.chomp(' ')
+    end
 
     def setOrUpdateFactoid(name, text)
         name.downcase!

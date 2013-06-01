@@ -6,6 +6,7 @@ Root command is ~factoid (or ~f) -- This for mods/ops only
 
 - add/a/update/u - Adds or updates a factoid (e.g. `~f a Factoids There are factoids`)
 - delete/d - Removes a factoid (e.g. `~f d Factoids`)
+- list/l - Lists all factoids on the current instance (`~f l`)
 
 Anyone can call a factoid by `!factoidname`, where factoid name is the name of the chosen factoid. Another syntax, `!factoidname :name` is available to point `factoidname` at `person name`.
 

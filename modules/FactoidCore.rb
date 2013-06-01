@@ -58,11 +58,16 @@ class FactoidCore
 
     def control(msg)
     	debug "FCMSG (Command: #{msg.command}, Params: #{msg.params.inspect}, Message: #{msg.message}, Raw: #{msg.raw})"
-        matches = /^~fa?c?t?o?i?d? (\w+) (\w+) ?(.+)?$/i.match(msg.message)
+        matches = /^~fa?c?t?o?i?d? (\w+) ?(\w+)? ?(.+)?$/i.match(msg.message)
 
-        if matches[1] == nil || matches[2] == nil
+        if matches[1] == nil then return end
+        # Check for list call
+        if /^(li?s?t?)$/i.match(matches[1]) != nil
+            msg.reply("Factoids for instance: #{@backend.getFactoidList}")
             return
         end
+
+        if matches[1] == nil || matches[2] == nil then return end
 
         cmd = matches[1]
         fname = matches[2]
