@@ -22,4 +22,4 @@ $LINK_DETECTIVE_STRIKES_VERBOSE = false     # Whether or not to tell the person 
 # Stop the system connecting to IRC
 DEBUG_MODE = false
 # Change target server
-$JTVIRC_SERVER = "#{STREAMER_NAME}.jtvirc.com"
+$JTVIRC_SERVER = "irc.twitch.tv"
