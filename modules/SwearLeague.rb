@@ -32,6 +32,7 @@ class SwearLeagueCore
 
     @@swears = [
         {:word => " windows", :weight  => 1},
+        {:word => " asp.net", :weight  => 1}
         {:word => " piss", :weight     => 1},
         {:word => "@slap", :weight     => 1},
         {:word => "bollocks", :weight  => 1},
@@ -40,7 +41,7 @@ class SwearLeagueCore
         {:word => " wank", :weight     => 1},
         {:word => " dick", :weight     => 1},
         {:word => " bastard", :weight  => 1},
-        {:word => "cock", :weight      => 1},
+        {:word => " cock", :weight     => 1},
         {:word => " arse", :weight     => 1},
         {:word => " shit", :weight     => 2},
         {:word => " whore", :weight    => 2},
