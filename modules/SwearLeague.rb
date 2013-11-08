@@ -26,31 +26,13 @@
 #
 
 require_relative 'SwearLeagueBackend.rb'
+require 'multi_json'
+require 'open-uri'
 
 class SwearLeagueCore
     include Cinch::Plugin
 
-    @@swears = [
-        {:word => " windows", :weight  => 1},
-        {:word => " asp.net", :weight  => 1},
-        {:word => " piss", :weight     => 1},
-        {:word => "@slap", :weight     => 1},
-        {:word => "bollocks", :weight  => 1},
-        {:word => " tits", :weight     => 1},
-        {:word => " slut", :weight     => 1},
-        {:word => " wank", :weight     => 1},
-        {:word => " dick", :weight     => 1},
-        {:word => " bastard", :weight  => 1},
-        {:word => " cock", :weight     => 1},
-        {:word => " arse", :weight     => 1},
-        {:word => " shit", :weight     => 2},
-        {:word => " whore", :weight    => 2},
-        {:word => " vista", :weight    => 6},
-        {:word => " nigger", :weight   => 6},
-        {:word => "fuck", :weight      => 10},
-        {:word => "gregtech", :weight  => 10},
-        {:word => " cunt", :weight     => 20}
-    ]
+    @@swears = []
 
     match /sw?e?a?r? .+/i, { :method => :control }
     match /.+/i, { :prefix => '', :method => :check }
@@ -58,16 +40,29 @@ class SwearLeagueCore
     def initialize(bot)
         super(bot)
         @backend = SwearLeagueBackend.new(config[:db_handler], bot)
+        refreshSwearList()
+    end
+
+    def refreshSwearList()
+        begin
+            open("http://enginger.me/irc-wordlist/wordlist.json") {|w|
+                @@swears = MultiJson.decode(w.read)
+            }
+            return "Updated wordlist."
+        rescue Exception => e
+            @logger.info "Failed to download wordlist: #{e}"
+            return "Failed to download wordlist. See console for full exception trace."
+        end
     end
 
     def check(msg)
         nick = msg.user.nick
         str = msg.message.downcase
         score = 0
-        @@swears.each {|s|
-            sc = str.scan(s[:word])
+        @@swears.each {|k, v|
+            sc = str.scan(k)
             if sc != nil
-                score += sc.length * s[:weight]
+                score += sc.length * v
             end
         }
 
@@ -84,7 +79,7 @@ class SwearLeagueCore
 
     def control(msg)
         debug "FCMSG (Command: #{msg.command}, Params: #{msg.params.inspect}, Message: #{msg.message}, Raw: #{msg.raw})"
-        matches = /^~sw?e?a?r? (\w+) ?(\w+)? ?(.+)?$/i.match(msg.message)
+        matches = /^~sw?e?a?r? (\w+) ?(\w+)? ?(.+)?$/i.match(msg.message.downcase)
 
         if matches[1] == nil then return end
         # Check for list call
@@ -98,6 +93,12 @@ class SwearLeagueCore
             top = @backend.getHighScore
             if (top[:nick] != nil)
                 msg.reply "#{top[:nick]} is the most pottymouthed here with a score of #{top[:score]}."
+            end
+        end
+
+        if adminPermCheck(msg.user, msg.channel)
+            if /^(re?f?r?e?s?h?)$/i.match(matches[1]) != nil
+                msg.reply(refreshSwearList())
             end
         end
 
