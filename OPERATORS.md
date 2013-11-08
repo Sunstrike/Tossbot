@@ -1,4 +1,4 @@
-# Redubot - Operators guide
+# Tossbot - Operators guide
 All commands are in the form `~root subcommand parameters`
 
 ## Factoids module (FactoidsCore/FactoidsBackend)
@@ -10,11 +10,10 @@ Root command is ~factoid (or ~f) -- This for mods/ops only
 
 Anyone can call a factoid by `!factoidname`, where factoid name is the name of the chosen factoid. Another syntax, `!factoidname :name` is available to point `factoidname` at `person name`.
 
-## LinkDetective module
-The action taken by the bot will depend on the specific instances configuration; ask your bot administrator for more. It will either warn, timeout or ban on first and second offense, and may act more strongly on third strike.
+## Swear League module (SwearLeagueCore/SwearLeagueBackend)
+Root command is ~swear (or ~s)
 
-Root command is ~permit (or ~p)
-
-- Permit once: ~p once/o name
-- Permit always: ~p always/a name
-    - Caveat: Both permissions **expire** when the bot is restarted, as the states are held in memory. If this is an issue, please file a feature request for persistent storage of link allowances.
+- delete/d - Removes a nick from the database (e.g. `~s d Sunstrike`) **+o/+v only**
+- list/l - Lists all nicks stored on the current instance (`~s l`)
+- stats/s - Gets the current top scoring nick (`~s s`)
+- get/g - Gets score for a nick (`~s g Sunstrike`)

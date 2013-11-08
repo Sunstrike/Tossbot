@@ -1,11 +1,9 @@
 #!/usr/bin/env ruby -wKU
 
-## Redubot
+## Tossbot
 ##      => Factoid core
-#
-# Twitch self-hosted moderation for the masses
 # 
-# Copyright (C) 2012 Sunstrike
+# Copyright (C) 2013 Sunstrike
 # 
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation
@@ -37,7 +35,7 @@ class FactoidCore
 
     def initialize(bot)
         super(bot)
-        @backend = FactoidBackend.new(config[:path], bot)
+        @backend = FactoidBackend.new(config[:db_handler], bot)
     end
 
     def factoid(msg)

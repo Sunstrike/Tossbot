@@ -1,11 +1,9 @@
 #!/usr/bin/env ruby -wKU
 
-## Redubot
+## Tossbot
 ##      => Core
 #
-# Twitch self-hosted moderation for the masses
-# 
-# Copyright (C) 2012 Sunstrike
+# Copyright (C) 2013 Sunstrike
 # 
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation
@@ -28,49 +26,49 @@
 #
 
 require 'cinch'
+require_relative 'modules/DBHandler.rb'
 require_relative 'config.rb'
-
-require_relative 'modules/CinchMonkeypatch.rb' # Fix for Twitch+Cinch weirdness due to WHOIS
 
 PATH = File.dirname(__FILE__)
 
 plugins = []
 
-if $FACTOIDS
+if FACTOIDS
     require_relative 'modules/FactoidCore.rb'
     plugins << FactoidCore
 end
-if $LINK_DETECTIVE
-    require_relative 'modules/LinkDetective.rb'
-    plugins << LinkDetective
+
+if SWEARING
+    require_relative 'modules/SwearLeague.rb'
+    plugins << SwearLeagueCore
 end
 
+db_handler = DBHandler.new(PATH)
+
 puts 'STARTING CINCH CORE:'
-puts "\tServer: #{$JTVIRC_SERVER}"
-puts "\tChannel: ##{STREAMER_NAME}"
-puts "\tBot Account: #{$JTVIRC_ACCOUNT}"
-puts "\tPatches: TwitchIRC Patch (by Sunstrike)"
+puts "\tServer: #{SERVER}"
+puts "\tChannels: #{CHANNELS}"
+puts "\tBot Account: #{ACCOUNT}"
+puts "\tPatches: None."
 
 bot = Cinch::Bot.new do
     configure do |c|
-        c.server = $JTVIRC_SERVER
-        c.nick = $JTVIRC_ACCOUNT
-        c.user = $JTVIRC_ACCOUNT
-        c.password = JTVIRC_PASSWORD
+        c.server = SERVER
+        c.nick = ACCOUNT
+        c.user = ACCOUNT
+        c.password = PASSWORD
         c.timeouts.connect = 30
-        c.channels = ["##{STREAMER_NAME}"]
+        c.channels = CHANNELS
         c.messages_per_second = 1
         c.plugins[:prefix] = /^~/
         c.plugins.plugins = plugins
 
-        if $FACTOIDS
-            c.plugins.options[FactoidCore] = { :path => PATH }
+        if FACTOIDS
+            c.plugins.options[FactoidCore] = { :db_handler => db_handler }
         end
-        if $LINK_DETECTIVE
-            c.plugins.options[LinkDetective] = { :action         => $LINK_DETECTIVE_ACTION,
-                                                 :strikes        => $LINK_DETECTIVE_STRIKES,
-                                                 :strike_action  => $LINK_DETECTIVE_STRIKES_ACTION,
-                                                 :strike_verbose => $LINK_DETECTIVE_STRIKES_VERBOSE }
+
+        if SWEARING
+            c.plugins.options[SwearLeagueCore] = { :db_handler => db_handler }
         end
     end
 end

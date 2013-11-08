@@ -1,25 +1,22 @@
-## Config for Redubot
+## Config for Tossbot
 
 ## USER BLOCK ##
-# Streamer channel - Lower case
-STREAMER_NAME = ""
+# IRC Server
+SERVER = 'irc.example.com'
 
-# The bot login details to Twitch
-$JTVIRC_ACCOUNT = ""
-JTVIRC_PASSWORD = ""
+# Channels
+CHANNELS = ['#Example']
 
-# Factoid module (the bot is pretty useless without this)
-$FACTOIDS = true
+# The bot login details to IRC
+ACCOUNT = 'Tossbot'
+PASSWORD = nil
 
-# Link detective
-$LINK_DETECTIVE = true
-$LINK_DETECTIVE_ACTION = :delete            # Options are: :delete, :timeout or :ban
-$LINK_DETECTIVE_STRIKES = false             # Whether or not to use a strikes system
-$LINK_DETECTIVE_STRIKES_ACTION = :ban       # Options are: :ban or :timeout
-$LINK_DETECTIVE_STRIKES_VERBOSE = false     # Whether or not to tell the person the number of strikes they have
+# Factoid module
+FACTOIDS = true
+
+# SwearLeague module
+SWEARING = true
 
 ## DEVELOPER BLOCK ##
 # Stop the system connecting to IRC
 DEBUG_MODE = false
-# Change target server
-$JTVIRC_SERVER = "irc.twitch.tv"

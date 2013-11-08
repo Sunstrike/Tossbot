@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby -wKU
 
 ## Tossbot
-##      => Factoid backend
+##      => Swear League backend
 # 
 # Copyright (C) 2013 Sunstrike
 # 
@@ -27,40 +27,44 @@
 
 require 'sequel'
 
-class FactoidBackend
+RetTuple = Struct.new(:result, :amount)
+
+class SwearLeagueBackend
+
     def initialize(handler, bot)
         @logger = bot.loggers
         @cache = {}
-        @logger.info("[FactoidBackend] Attaching to handler...")
+        @logger.info("[SwearLeagueBackend] Attaching to handler...")
         handler.setup(bot)
         @dbLink = handler.getSequel
         # Create table if needed
-        @dbLink.create_table? :factoids do
+        @dbLink.create_table? :swearing do
             primary_key :id
-            String :name
-            String :text
+            String :nick
+            Int :score
         end
-        @factDb = @dbLink[:factoids]
-        if @factDb.empty?
-            @logger.info('[FactoidBackend] No entries in Factoid table! Use ~f set to add factoids or alter the SQLite3 DB manually.')
+        @swearDb = @dbLink[:swearing]
+        if @swearDb.empty?
+            @logger.info('[SwearLeagueBackend] No entries in Swearing table! Quick, piss someone off!')
+            @cache = {}
         else
             rebuildCache()
         end
     end
 
     def rebuildCache()
-        @logger.info('[FactoidBackend] Rebuilding memory-resident cache.')
-        @cache = @factDb.to_hash(:name, :text)
+        @logger.info('[SwearLeagueBackend] Rebuilding memory-resident cache.')
+        @cache = @swearDb.to_hash(:nick, :score)
     end
 
-	def getFactoid(name)
-        name.downcase!
-        if @cache.has_key?(name)
-            return @cache[name]
+	def getScore(nick)
+        nick.downcase!
+        if @cache.has_key?(nick)
+            return @cache[nick]
         else
-            tmp = @factDb.filter(:name => name).first
-            if tmp == nil || tmp == ''
-                return nil
+            tmp = @swearDb.filter(:nick => nick).first
+            if tmp == nil || tmp == 0
+                return 0
             else
                 # Self-repair in case of things in the DB but not in the cache
                 rebuildCache()
@@ -69,7 +73,19 @@ class FactoidBackend
         end
     end
 
-    def getFactoidList()
+    def getHighScore()
+        max = {:nick => nil, :score => 0}
+        @cache.each {|k, v|
+            if (v > max[:score])
+                max[:nick] = k
+                max[:score] = v
+            end
+        }
+
+        max
+    end
+
+    def getStoredNicks()
         rebuildCache()
         out = ''
         @cache.each_key do |k|
@@ -78,24 +94,32 @@ class FactoidBackend
         out.chomp(' ')
     end
 
-    def setOrUpdateFactoid(name, text)
-        name.downcase!
-        tmp = @factDb.filter(:name => name).first
-        result = :unknown
-        if tmp == nil
-            @factDb.insert(:name => name, :text => text)
-            result = :add
+    def addToScore(nick, amnt)
+        nick.downcase!
+        tmp = @swearDb.filter(:nick => nick).first
+        result = RetTuple.new
+        result.result = :unknown
+        result.amount = 0
+
+        if tmp == nil || tmp == 0
+            @swearDb.insert(:nick => nick, :score => amnt)
+            @cache[nick] = amnt
+            result.result = :add
+            result.amount = amnt
         else
-            @factDb.filter(:name => name).update(:text => text)
-            result = :update
+            newScore = getScore(nick) + amnt
+            @swearDb.filter(:nick => nick).update(:score => newScore)
+            @cache[nick] = newScore
+            result.result = :update
+            result.amount = newScore
         end
-        @cache[name] = text
-        return result
+
+        result
     end
 
-    def deleteFactoid(name)
-        name.downcase!
-        @factDb.filter(:name => name).delete
-        @cache.delete(name)
+    def deleteNick(nick)
+        nick.downcase!
+        @swearDb.filter(:nick => nick).delete
+        @cache.delete(nick)
     end
 end
