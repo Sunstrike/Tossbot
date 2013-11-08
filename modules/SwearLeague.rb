@@ -31,23 +31,24 @@ class SwearLeagueCore
     include Cinch::Plugin
 
     @@swears = [
-        {:word => "windows", :weight  => 1},
-        {:word => "piss", :weight     => 1},
-        {:word => "@slap", :weight    => 1},
-        {:word => "bollocks", :weight => 1},
-        {:word => "tits", :weight     => 1},
-        {:word => "slut", :weight     => 1},
-        {:word => "wank", :weight     => 1},
-        {:word => "dick", :weight     => 1},
-        {:word => "bastard", :weight  => 1},
-        {:word => "cock", :weight     => 1},
-        {:word => "arse", :weight     => 1},
-        {:word => "shit", :weight     => 2},
-        {:word => "whore", :weight    => 2},
-        {:word => "vista", :weight    => 6},
-        {:word => "nigger", :weight   => 6},
-        {:word => "fuck", :weight     => 10},
-        {:word => "cunt", :weight     => 20}
+        {:word => " windows", :weight  => 1},
+        {:word => " piss", :weight     => 1},
+        {:word => "@slap", :weight     => 1},
+        {:word => "bollocks", :weight  => 1},
+        {:word => " tits", :weight     => 1},
+        {:word => " slut", :weight     => 1},
+        {:word => " wank", :weight     => 1},
+        {:word => " dick", :weight     => 1},
+        {:word => " bastard", :weight  => 1},
+        {:word => "cock", :weight      => 1},
+        {:word => " arse", :weight     => 1},
+        {:word => " shit", :weight     => 2},
+        {:word => " whore", :weight    => 2},
+        {:word => " vista", :weight    => 6},
+        {:word => " nigger", :weight   => 6},
+        {:word => "fuck", :weight      => 10},
+        {:word => "gregtech", :weight  => 10}
+        {:word => " cunt", :weight     => 20}
     ]
 
     match /sw?e?a?r? .+/i, { :method => :control }

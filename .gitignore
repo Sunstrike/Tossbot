@@ -1,4 +1,4 @@
 .rbx
 config.rb
-tosspot.db
+*.db
 .idea
